@@ -19,6 +19,7 @@ def test_create_task(client):
     assert task["title"] == "Test Task"
     assert task["project_id"] == project_id
 
+
 def test_create_task_deadline_after_project_deadline(client):
     # First create a project and get it's id
     project_resp = client.post("/projects/", json={
@@ -39,8 +40,33 @@ def test_create_task_deadline_after_project_deadline(client):
     
 
 def test_get_tasks(client):
+    # First download tasks
     response = client.get("/tasks/")
     assert response.status_code == 200
+    # If response was 200 then check data length and type
     data = response.json()
     assert isinstance(data, list)
     assert len(data) >= 1
+
+
+def test_update_task(client):
+    # First download a task
+    response = client.get("/tasks/")
+    assert response.status_code == 200
+    data = response.json()[0]
+    # Change description of first task and see if it worked
+    new_desc = 'Changed description'
+    data['description'] = new_desc
+    task_resp = client.put(f'/tasks/{data['id']}', json=data)
+    assert task_resp.status_code == 200
+    assert task_resp.json()['description'] == new_desc
+
+
+def test_delete_task(client):
+    # First download a task
+    response = client.get("/tasks/")
+    assert response.status_code == 200
+    data = response.json()[0]
+    # Try to delete it and see if it worked
+    task_resp = client.delete(f'/tasks/{data['id']}')
+    assert task_resp.status_code == 200
