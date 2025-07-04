@@ -17,6 +17,7 @@ def test_create_task(client):
         "completed": False,
         "project_id": project_id
     })
+    # Check if task was created
     assert task_resp.status_code == 200
     task = task_resp.json()
     assert task["title"] == "Test Task"
