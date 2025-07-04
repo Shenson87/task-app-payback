@@ -36,7 +36,7 @@ const TaskList = () => {
             <td className="px-6 py-4">
               {moment(task.deadline).format("YYYY-MM-DD")}
             </td>
-            <td className="px-6 py-4"></td>
+            <td className="px-6 py-4">{task.id}</td>
           </tr>
         ))}
       </tbody>
