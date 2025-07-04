@@ -1,3 +1,6 @@
+from tests.conftest import create_task
+
+
 def test_create_task(client):
     # First create a project and get it's id
     project_resp = client.post("/projects/", json={

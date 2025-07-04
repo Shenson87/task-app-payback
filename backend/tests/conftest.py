@@ -40,8 +40,50 @@ def client():
     yield TestClient(app)
 
 
-@pytest.fixture(scope="session", autouse=True)
-def teardown():
-    yield
-    Base.metadata.drop_all(bind=connection)
-    connection.close()
+@pytest.fixture
+def create_project(client):
+    def _create_project(title="Test Project", deadline=None):
+        if deadline is None:
+            deadline = (datetime.now() + timedelta(days=30)).isoformat()
+        response = client.post("/projects/", json={
+            "title": title,
+            "deadline": deadline
+        })
+        assert response.status_code == 200
+        return response.json()
+    return _create_project
+
+
+@pytest.fixture
+def create_task(client, create_project):
+    def _create_task(
+        title="Test Task",
+        description="Some description",
+        deadline=None,
+        completed=False,
+        project_id=None
+    ):
+        if project_id is None:
+            project = create_project()
+            project_id = project["id"]
+        if deadline is None:
+            deadline = (datetime.now() + timedelta(days=10)).isoformat()
+
+        response = client.post("/tasks/", json={
+            "title": title,
+            "description": description,
+            "deadline": deadline,
+            "completed": completed,
+            "project_id": project_id
+        })
+        assert response.status_code == 200
+        return response.json()
+    return _create_task
+
+
+@pytest.fixture(autouse=True)
+def clean_db():
+    """Clean all tables before each test"""
+    with engine.begin() as conn:
+        for table in reversed(Base.metadata.sorted_tables):
+            conn.execute(table.delete())
