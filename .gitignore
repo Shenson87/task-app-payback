@@ -1,0 +1,22 @@
+# Python (backend)
+__pycache__/
+*.pyc
+venv/
+.env
+.pytest_cache
+tasks.db
+
+# Node (frontend)
+node_modules/
+dist/
+.next/
+.env.local
+.turbo/
+.cache/
+
+# macOS
+.DS_Store
+.vscode
+
+# Logs
+*.log
