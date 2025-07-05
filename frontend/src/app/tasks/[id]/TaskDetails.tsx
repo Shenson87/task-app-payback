@@ -12,7 +12,7 @@ const TaskDetails = ({ task }: { task: Task }) => {
         <TaskStatusBadge status={task.completed} />
         <Text>{moment(task.deadline).format("YYYY-MM-DD")}</Text>
       </Flex>
-      <Card className="prose" mt="4">
+      <Card className="prose max-w-full" mt="4">
         <ReactMarkdown>{task.description}</ReactMarkdown>
       </Card>
     </>

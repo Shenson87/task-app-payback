@@ -1,10 +1,14 @@
-import React from 'react'
-import TaskForm from '../_components/TaskForm'
+"use client";
+import dynamic from "next/dynamic";
+import TaskFormSkeleton from "../_components/TaskFormSkeleton";
+
+const TaskForm = dynamic(() => import("../_components/TaskForm"), {
+  ssr: false,
+  loading: () => <TaskFormSkeleton />,
+});
 
 const NewTaskPage = () => {
-  return (
-    <TaskForm />
-  )
-}
+  return <TaskForm />;
+};
 
-export default NewTaskPage
+export default NewTaskPage;

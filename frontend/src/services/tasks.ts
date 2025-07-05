@@ -24,3 +24,7 @@ export async function putTask(taskId: number, taskData: TaskForm): Promise<Task>
   const response = await api.put(`/tasks/${taskId}`, taskData);
   return response.data as Task;
 }
+
+export async function deleteTask(taskId: number): Promise<void> {
+  await api.delete(`/tasks/${taskId}`);
+}

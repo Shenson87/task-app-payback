@@ -1,4 +1,5 @@
 "use client";
+import { Spinner } from "@/app/components";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { taskFormSchema } from "@/app/validationSchemas";
 import { createTask, putTask } from "@/services/tasks";
@@ -80,7 +81,8 @@ const TaskForm = ({ task }: { task?: Task }) => {
           {...register("project_id")}
         />
         <Button disabled={isSubmitting}>
-          {task ? "Update Task" : "Submit Task"}
+          {task ? "Update Task" : "Submit Task"}{" "}
+          {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>
