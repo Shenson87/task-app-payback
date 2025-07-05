@@ -1,8 +1,8 @@
 import { getTasks } from "@/services/tasks";
-import { Table } from "@radix-ui/themes";
+import { Table} from "@radix-ui/themes";
 import moment from "moment";
 import TaskStatusBadge from "./TaskStatusBadge";
-import Link from "next/link";
+import Link from './Link'
 
 
 const TaskList = async () => {
