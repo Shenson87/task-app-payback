@@ -22,6 +22,7 @@ const NewProjectPage = () => {
     try {
       await createProject(data);
       router.push("/projects");
+      router.refresh();
     } catch (error) {
       console.log(error);
       setError("An error occurred while creating the project.");

@@ -37,6 +37,7 @@ const TaskForm = ({ task }: { task?: Task }) => {
         await createTask(data);
       }
       router.push("/tasks");
+      router.refresh();
     } catch (error) {
       console.log(error);
       setError("An error occurred while creating the task.");

@@ -36,4 +36,6 @@ const ProjectsPage = async () => {
   );
 };
 
+export const dynamic = "force-dynamic";
+
 export default ProjectsPage;
