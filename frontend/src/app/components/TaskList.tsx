@@ -1,44 +1,35 @@
 import { getTasks } from "@/services/tasks";
+import { Table } from "@radix-ui/themes";
 import moment from "moment";
+import TaskStatusBadge from "./TaskStatusBadge";
 
 const TaskList = async () => {
   const tasks = await getTasks();
 
-  // if (isLoading) return <p>Loading…</p>;
-  // if (error) return <p>Error: {(error as Error).message}</p>;
-
   return (
-    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-      <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <th scope="col" className="px-6 py-3">
-            Task Name
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Task Description
-          </th>
-          <th scope="col" className="px-6 py-3">
-            Deadline
-          </th>
-          <th scope="col" className="px-6 py-3"></th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table.Root variant='surface'>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeaderCell>Task Name</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell className='hidden md:table-cell'>Task Description</Table.ColumnHeaderCell> 
+          <Table.ColumnHeaderCell className='hidden md:table-cell'>Deadline</Table.ColumnHeaderCell>
+          <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
         {tasks?.map((task) => (
-          <tr
-            key={task.id}
-            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200"
-          >
-            <td className="px-6 py-4">{task.title} </td>
-            <td className="px-6 py-4">{task.description}</td>
-            <td className="px-6 py-4">
-              {moment(task.deadline).format("YYYY-MM-DD")}
-            </td>
-            <td className="px-6 py-4">{task.id}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+          <Table.Row key={task.id}>
+            <Table.Cell>
+              {task.title}
+              <div className='block md:hidden'>{task.completed ? "Completed" : "Not Completed"}</div>
+            </Table.Cell>
+            <Table.Cell className='hidden md:table-cell'>{task.description}</Table.Cell>
+            <Table.Cell className='hidden md:table-cell'>{moment(task.deadline).format("YYYY-MM-DD")}</Table.Cell>
+            <Table.Cell className='hidden md:table-cell'><TaskStatusBadge status={task.completed} /></Table.Cell>
+          </Table.Row>
+      ))}
+      </Table.Body>
+    </Table.Root>
   );
 };
 

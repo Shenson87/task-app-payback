@@ -6,7 +6,9 @@ import TaskList from '../components/TaskList'
 const TasksPage = () => {
   return (
     <div>
-      <Button><Link href="/tasks/new">New Task</Link></Button>
+      <div className='mb-5'>
+        <Button><Link href="/tasks/new">New Task</Link></Button>
+      </div>
       <TaskList/>
     </div>
   )
