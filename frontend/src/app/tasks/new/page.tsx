@@ -1,14 +1,13 @@
-"use client";
-import dynamic from "next/dynamic";
-import TaskFormSkeleton from "../_components/TaskFormSkeleton";
+import { getProjects } from "@/services/projects";
+import TaskForm from "../_components/TaskForm";
 
-const TaskForm = dynamic(() => import("../_components/TaskForm"), {
-  ssr: false,
-  loading: () => <TaskFormSkeleton />,
-});
-
-const NewTaskPage = () => {
-  return <TaskForm />;
+const NewTaskPage = async () => {
+  try {
+    const projects = await getProjects();
+    return <TaskForm projects={projects} />;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export default NewTaskPage;

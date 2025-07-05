@@ -3,9 +3,10 @@ import { Spinner } from "@/app/components";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { taskFormSchema } from "@/app/validationSchemas";
 import { createTask, putTask } from "@/services/tasks";
+import { Project } from "@/types/project";
 import { Task } from "@/types/task";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Callout, TextField } from "@radix-ui/themes";
+import { Button, Callout, Select, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import moment from "moment";
 import { useRouter } from "next/navigation";
@@ -16,7 +17,7 @@ import { z } from "zod";
 
 type TaskFormData = z.infer<typeof taskFormSchema>;
 
-const TaskForm = ({ task }: { task?: Task }) => {
+const TaskForm = ({ task, projects }: { task?: Task; projects: Project[] }) => {
   const router = useRouter();
   const {
     register,
@@ -75,14 +76,29 @@ const TaskForm = ({ task }: { task?: Task }) => {
           {...register("deadline")}
         />
         <ErrorMessage>{errors.project_id?.message}</ErrorMessage>
-        <TextField.Root
-          defaultValue={task?.project_id}
-          placeholder="Project"
-          {...register("project_id")}
+        <div>
+        <Controller
+          name="project_id"
+          control={control}
+          render={({ field }) => (
+            <Select.Root
+              onValueChange={field.onChange}
+              defaultValue={task?.project_id.toString()}
+            >
+              <Select.Trigger placeholder="Select a project" />
+              <Select.Content>
+                {projects?.map((project) => (
+                  <Select.Item key={project.id} value={project.id.toString()}>
+                    {project.title}
+                  </Select.Item>
+                ))}
+              </Select.Content>
+            </Select.Root>
+          )}
         />
+        </div>
         <Button disabled={isSubmitting}>
-          {task ? "Update Task" : "Submit Task"}{" "}
-          {isSubmitting && <Spinner />}
+          {task ? "Update Task" : "Submit Task"} {isSubmitting && <Spinner />}
         </Button>
       </form>
     </div>

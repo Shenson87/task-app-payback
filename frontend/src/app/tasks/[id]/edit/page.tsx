@@ -1,3 +1,4 @@
+import { getProjects } from "@/services/projects";
 import { getTask } from "@/services/tasks";
 import { notFound } from "next/navigation";
 import TaskForm from "../../_components/TaskForm";
@@ -9,7 +10,8 @@ interface Props {
 const EditTaskPage = async ({ params }: Props) => {
   try {
     const task = await getTask(parseInt(params.id));
-    return <TaskForm task={task} />;
+    const projects = await getProjects();
+    return <TaskForm task={task} projects={projects} />;
   } catch (error) {
     console.log(error);
     return notFound();
