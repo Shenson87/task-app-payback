@@ -1,7 +1,7 @@
 "use client";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { taskFormSchema } from "@/app/validationSchemas";
-import { createTask } from "@/services/tasks";
+import { createTask, putTask } from "@/services/tasks";
 import { Task } from "@/types/task";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Callout, TextField } from "@radix-ui/themes";
@@ -26,10 +26,16 @@ const TaskForm = ({ task }: { task?: Task }) => {
     resolver: zodResolver(taskFormSchema),
   });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await createTask(data);
+      setIsSubmitting(true);
+      if (task) {
+        await putTask(task.id, data);
+      } else {
+        await createTask(data);
+      }
       router.push("/tasks");
     } catch (error) {
       console.log(error);
@@ -46,7 +52,11 @@ const TaskForm = ({ task }: { task?: Task }) => {
       )}
       <form className="space-y-3" onSubmit={onSubmit}>
         <ErrorMessage>{errors.title?.message}</ErrorMessage>
-        <TextField.Root defaultValue={task?.title} placeholder="Title" {...register("title")} />
+        <TextField.Root
+          defaultValue={task?.title}
+          placeholder="Title"
+          {...register("title")}
+        />
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Controller
           name="description"
@@ -63,8 +73,14 @@ const TaskForm = ({ task }: { task?: Task }) => {
           {...register("deadline")}
         />
         <ErrorMessage>{errors.project_id?.message}</ErrorMessage>
-        <TextField.Root defaultValue={task?.project_id} placeholder="Project" {...register("project_id")} />
-        <Button>Submit New Task</Button>
+        <TextField.Root
+          defaultValue={task?.project_id}
+          placeholder="Project"
+          {...register("project_id")}
+        />
+        <Button disabled={isSubmitting}>
+          {task ? "Update Task" : "Submit Task"}
+        </Button>
       </form>
     </div>
   );
