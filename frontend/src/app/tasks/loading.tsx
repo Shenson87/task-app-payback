@@ -1,10 +1,8 @@
 import { Table } from "@radix-ui/themes";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import { Skeleton } from '@/app/components';
 import TaskToolbar from "./TaskToolbar";
 
 const LoadingTasksPage = () => {
-  const tasks = [1, 2, 3, 4, 5];
   return (
     <div>
       <TaskToolbar />
@@ -21,7 +19,7 @@ const LoadingTasksPage = () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {tasks?.map((task) => (
+          {[1, 2, 3, 4, 5].map((task) => (
             <Table.Row key={task}>
               <Table.Cell>
                 <Skeleton />

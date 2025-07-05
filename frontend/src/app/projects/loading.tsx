@@ -1,10 +1,8 @@
-import { getProjects } from "@/services/projects";
+import { Skeleton } from "@/app/components";
 import { Button, Table } from "@radix-ui/themes";
-import moment from "moment";
 import Link from "next/link";
 
-const ProjectsPage = async () => {
-  const projects = await getProjects();
+const LoadingProjectsPage = () => {
   return (
     <div>
       <div className="mb-5">
@@ -22,11 +20,13 @@ const ProjectsPage = async () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {projects?.map((project) => (
-            <Table.Row key={project.id}>
-              <Table.Cell>{project.title}</Table.Cell>
+          {[1, 2, 3, 4, 5].map((project) => (
+            <Table.Row key={project}>
+              <Table.Cell>
+                <Skeleton />
+              </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
-                {moment(project.deadline).format("YYYY-MM-DD")}
+                <Skeleton />
               </Table.Cell>
             </Table.Row>
           ))}
@@ -36,4 +36,4 @@ const ProjectsPage = async () => {
   );
 };
 
-export default ProjectsPage;
+export default LoadingProjectsPage;
