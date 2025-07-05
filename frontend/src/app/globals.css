@@ -20,7 +20,5 @@
 }
 
 body {
-  background: linear-gradient(var(--color-purple-900) 0, var(--color-indigo-900) 100%);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }

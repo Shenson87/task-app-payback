@@ -1,13 +1,11 @@
-"use client";
-
-import { useTasks } from "@/hooks/useTasks";
+import { getTasks } from "@/services/tasks";
 import moment from "moment";
 
-const TaskList = () => {
-  const { data: tasks, isLoading, error } = useTasks();
+const TaskList = async () => {
+  const tasks = await getTasks();
 
-  if (isLoading) return <p>Loading…</p>;
-  if (error) return <p>Error: {(error as Error).message}</p>;
+  // if (isLoading) return <p>Loading…</p>;
+  // if (error) return <p>Error: {(error as Error).message}</p>;
 
   return (
     <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
