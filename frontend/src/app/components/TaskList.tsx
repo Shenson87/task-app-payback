@@ -13,7 +13,6 @@ const TaskList = async () => {
       <Table.Header>
         <Table.Row>
           <Table.ColumnHeaderCell>Task Name</Table.ColumnHeaderCell>
-          <Table.ColumnHeaderCell className='hidden md:table-cell'>Task Description</Table.ColumnHeaderCell> 
           <Table.ColumnHeaderCell className='hidden md:table-cell'>Deadline</Table.ColumnHeaderCell>
           <Table.ColumnHeaderCell className='hidden md:table-cell'>Status</Table.ColumnHeaderCell>
         </Table.Row>
@@ -25,7 +24,6 @@ const TaskList = async () => {
               <Link href={`/tasks/${task.id}`}>{task.title}</Link>
               <div className='block md:hidden'>{task.completed ? "Completed" : "Not Completed"}</div>
             </Table.Cell>
-            <Table.Cell className='hidden md:table-cell'>{task.description}</Table.Cell>
             <Table.Cell className='hidden md:table-cell'>{moment(task.deadline).format("YYYY-MM-DD")}</Table.Cell>
             <Table.Cell className='hidden md:table-cell'><TaskStatusBadge status={task.completed} /></Table.Cell>
           </Table.Row>

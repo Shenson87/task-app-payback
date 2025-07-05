@@ -3,6 +3,7 @@ import { getTask } from "@/services/tasks";
 import { Card, Flex, Heading, Text } from "@radix-ui/themes";
 import moment from "moment";
 import { notFound } from "next/navigation";
+import ReactMarkdown from 'react-markdown'
 
 interface Props {
   params: { id: string };
@@ -18,8 +19,8 @@ const TaskDetailPage = async ({ params }: Props) => {
           <TaskStatusBadge status={task.completed} />
           <Text as="p">{moment(task.deadline).format("YYYY-MM-DD")}</Text>
         </Flex>
-        <Card>
-          <Text as="p">{task.description}</Text>
+        <Card className="prose" mt="4">
+          <ReactMarkdown>{task.description}</ReactMarkdown>
         </Card>
       </div>
     );
