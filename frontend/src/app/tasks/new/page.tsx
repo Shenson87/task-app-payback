@@ -1,24 +1,29 @@
 "use client";
+import ErrorMessage from "@/app/components/ErrorMessage";
+import { taskFormSchema } from "@/app/validationSchemas";
 import { createTask } from "@/services/tasks";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Callout, TextField } from "@radix-ui/themes";
-import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { taskFormSchema } from "@/app/validationSchemas";
+import { Controller, useForm } from "react-hook-form";
+import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
-import ErrorMessage from "@/app/components/ErrorMessage";
 
 type TaskForm = z.infer<typeof taskFormSchema>;
 
 const NewTaskPage = () => {
   const router = useRouter();
-  const { register, control, handleSubmit, formState: { errors } } = useForm<TaskForm>({
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TaskForm>({
     resolver: zodResolver(taskFormSchema),
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -33,7 +38,7 @@ const NewTaskPage = () => {
   return (
     <div className="max-w-xl">
       {error && (
-        <Callout.Root color="red" className='mb-5'>
+        <Callout.Root color="red" className="mb-5">
           <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
@@ -45,10 +50,7 @@ const NewTaskPage = () => {
           name="description"
           control={control}
           render={({ field }) => (
-            <SimpleMDE
-              placeholder="Description"
-              {...field}
-            />
+            <SimpleMDE placeholder="Description" {...field} />
           )}
         />
         <ErrorMessage>{errors.deadline?.message}</ErrorMessage>

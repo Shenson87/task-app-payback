@@ -1,17 +1,16 @@
-import { Box } from '@radix-ui/themes'
-import React from 'react'
-import Skeleton from 'react-loading-skeleton'
+import { Box } from "@radix-ui/themes";
+import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const LoadingNewTaskPage = () => {
   return (
-    <Box className='max-w-xl'>
+    <Box className="max-w-xl">
       <Skeleton />
       <Skeleton height="20rem" />
       <Skeleton />
       <Skeleton />
     </Box>
-  )
-}
+  );
+};
 
-export default LoadingNewTaskPage
+export default LoadingNewTaskPage;

@@ -1,10 +1,11 @@
-import { Badge } from '@radix-ui/themes'
-import React from 'react'
+import { Badge } from "@radix-ui/themes";
 
-const TaskStatusBadge = ({ status }: {status: boolean}) => {
+const TaskStatusBadge = ({ status }: { status: boolean }) => {
   return (
-    <Badge color={status ? "green" : "violet"}>{status ? "Completed" : "In Progress"}</Badge>
-  )
-}
+    <Badge color={status ? "green" : "violet"}>
+      {status ? "Completed" : "In Progress"}
+    </Badge>
+  );
+};
 
-export default TaskStatusBadge
+export default TaskStatusBadge;
