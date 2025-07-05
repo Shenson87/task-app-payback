@@ -2,6 +2,7 @@ import { getTasks } from "@/services/tasks";
 import { Table } from "@radix-ui/themes";
 import moment from "moment";
 import TaskStatusBadge from "./TaskStatusBadge";
+import Link from "next/link";
 
 
 const TaskList = async () => {
@@ -21,7 +22,7 @@ const TaskList = async () => {
         {tasks?.map((task) => (
           <Table.Row key={task.id}>
             <Table.Cell>
-              {task.title}
+              <Link href={`/tasks/${task.id}`}>{task.title}</Link>
               <div className='block md:hidden'>{task.completed ? "Completed" : "Not Completed"}</div>
             </Table.Cell>
             <Table.Cell className='hidden md:table-cell'>{task.description}</Table.Cell>

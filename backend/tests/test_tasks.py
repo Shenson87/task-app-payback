@@ -51,6 +51,18 @@ def test_get_tasks(client):
     data = response.json()
     assert isinstance(data, list)
     assert len(data) >= 1
+    
+    
+def test_get_single_task(client, create_task):
+    task = create_task()
+    response = client.get(f"/tasks/{task['id']}")
+    assert response.status_code == 200
+    assert response.json()["id"] == task["id"]
+
+
+def test_get_nonexistent_task(client):
+    response = client.get("/tasks/9999")
+    assert response.status_code == 404
 
 
 def test_update_task(client):

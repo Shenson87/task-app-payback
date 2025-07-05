@@ -17,6 +17,14 @@ router = APIRouter(
 def get_tasks(db: Session = Depends(get_db)):
     return db.query(models.Task).all()
 
+# Get a specific Task
+@router.get('/{task_id}', response_model=schemas.TaskOut)
+def get_task(task_id: int, db: Session = Depends(get_db)):
+    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
+    if not db_task:
+        raise HTTPException(404, "Task not found")
+    return db_task
+
 # Create a new Task
 @router.post("/", response_model=schemas.TaskOut)
 def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
