@@ -5,6 +5,7 @@ venv/
 .env
 .pytest_cache
 tasks.db
+.coverage
 
 # Node (frontend)
 node_modules/

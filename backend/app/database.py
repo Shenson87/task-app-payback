@@ -16,7 +16,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
 # Database session generator
-def get_db():
+def get_db(): # pragma: no cover
     db = SessionLocal()
     try:
         yield db

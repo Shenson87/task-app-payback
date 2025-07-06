@@ -66,8 +66,6 @@ def create_task(client, create_project):
         if project_id is None:
             project = create_project()
             project_id = project["id"]
-        if deadline is None:
-            deadline = (datetime.now() + timedelta(days=10)).isoformat()
 
         response = client.post("/tasks/", json={
             "title": title,

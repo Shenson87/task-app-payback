@@ -39,9 +39,6 @@ def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
     Returns:
     schemas.TaskOut: The newly created task.
     """
-    if not task.project_id:
-        raise HTTPException(400, "Project ID is required")
-
     # Check if task deadline is earlier than project deadline
     if task.deadline:
         validate_task_deadline(db, task)
@@ -105,7 +102,7 @@ def update_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(ge
     if not db_task:
         raise HTTPException(404, "Task not found")
 
-    # Check if project exists and task deadline is earlier than project deadline
+    # Check if task deadline is earlier than project deadline
     if task.deadline:
         validate_task_deadline(db, task)
 
