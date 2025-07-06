@@ -2,6 +2,7 @@
 import { Spinner } from "@/app/components";
 import ErrorMessage from "@/app/components/ErrorMessage";
 import { taskFormSchema } from "@/app/validationSchemas";
+import { getProjects } from "@/services/projects";
 import { createTask, putTask } from "@/services/tasks";
 import { Project } from "@/types/project";
 import { Task } from "@/types/task";
@@ -10,14 +11,25 @@ import { Button, Callout, Select, TextField } from "@radix-ui/themes";
 import "easymde/dist/easymde.min.css";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import SimpleMDE from "react-simplemde-editor";
+import dynamic from 'next/dynamic';
 import { z } from "zod";
+
+const SimpleMDE = dynamic(() => import('react-simplemde-editor'), { ssr: false });
 
 type TaskFormData = z.infer<typeof taskFormSchema>;
 
-const TaskForm = ({ task, projects }: { task?: Task; projects: Project[] }) => {
+const TaskForm = ({ task }: { task?: Task }) => {
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getProjects()
+      .then((data) => setProjects(data))
+      .finally(() => setLoading(false));
+  }, []);
+
   const router = useRouter();
   const {
     register,
@@ -81,6 +93,7 @@ const TaskForm = ({ task, projects }: { task?: Task; projects: Project[] }) => {
           {...register("deadline")}
         />
         <ErrorMessage>{errors.project_id?.message}</ErrorMessage>
+        { loading && <Spinner /> ||
         <div>
           <Controller
             name="project_id"
@@ -103,6 +116,7 @@ const TaskForm = ({ task, projects }: { task?: Task; projects: Project[] }) => {
             )}
           />
         </div>
+        }
         <Button disabled={isSubmitting}>
           {task ? "Update Task" : "Submit Task"} {isSubmitting && <Spinner />}
         </Button>

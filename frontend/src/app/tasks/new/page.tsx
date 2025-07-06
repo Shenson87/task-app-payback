@@ -1,10 +1,8 @@
-import { getProjects } from "@/services/projects";
 import TaskForm from "../_components/TaskForm";
 
 const NewTaskPage = async () => {
   try {
-    const projects = await getProjects();
-    return <TaskForm projects={projects} />;
+    return <TaskForm />;
   } catch (error) {
     console.log(error);
   }

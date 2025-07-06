@@ -1,0 +1,26 @@
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+
+# Virtual environments (if any)
+venv/
+env/
+ENV/
+
+# Git files
+.git
+.gitignore
+
+# Docker files
+Dockerfile
+docker-compose.yml
+
+# Tests and coverage reports (optional, keep if you want tests inside container)
+tests/
+.coverage
+htmlcov/
