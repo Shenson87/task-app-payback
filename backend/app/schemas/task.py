@@ -1,10 +1,11 @@
+from typing import Optional
 from pydantic import BaseModel, ConfigDict
 from datetime import datetime
 
 class TaskBase(BaseModel):
     title: str
     description: str
-    deadline: datetime
+    deadline: Optional[datetime] = None
     completed: bool = False
 
 class TaskCreate(TaskBase):

@@ -1,4 +1,4 @@
-import TaskList from "../components/TaskList";
+import TaskList from "./_components/TaskList";
 import TaskToolbar from "./TaskToolbar";
 
 const TasksPage = () => {

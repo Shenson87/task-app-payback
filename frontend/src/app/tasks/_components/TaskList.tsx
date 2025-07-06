@@ -1,7 +1,7 @@
+import { Link } from "@/app/components";
 import { getTasks } from "@/services/tasks";
 import { Table } from "@radix-ui/themes";
 import moment from "moment";
-import Link from "./Link";
 import TaskStatusBadge from "./TaskStatusBadge";
 
 const TaskList = async () => {
@@ -30,7 +30,8 @@ const TaskList = async () => {
               </div>
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
-              {moment(task.deadline).format("YYYY-MM-DD")}
+              {(task.deadline && moment(task.deadline).format("YYYY-MM-DD")) ||
+                "N/A"}
             </Table.Cell>
             <Table.Cell className="hidden md:table-cell">
               <TaskStatusBadge status={task.completed} />

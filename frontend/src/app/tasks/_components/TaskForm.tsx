@@ -33,6 +33,9 @@ const TaskForm = ({ task, projects }: { task?: Task; projects: Project[] }) => {
   const onSubmit = handleSubmit(async (data) => {
     try {
       setIsSubmitting(true);
+      if (!data.deadline || data.deadline.trim() === "") {
+        delete data.deadline;
+      }
       if (task) {
         await putTask(task.id, data);
       } else {
@@ -71,31 +74,34 @@ const TaskForm = ({ task, projects }: { task?: Task; projects: Project[] }) => {
         />
         <ErrorMessage>{errors.deadline?.message}</ErrorMessage>
         <TextField.Root
-          defaultValue={moment(task?.deadline).format("YYYY-MM-DD")}
+          defaultValue={
+            task?.deadline && moment(task?.deadline).format("YYYY-MM-DD")
+          }
           placeholder="Deadline (YYYY-MM-DD)"
           {...register("deadline")}
         />
         <ErrorMessage>{errors.project_id?.message}</ErrorMessage>
         <div>
-        <Controller
-          name="project_id"
-          control={control}
-          render={({ field }) => (
-            <Select.Root
-              onValueChange={field.onChange}
-              defaultValue={task?.project_id.toString()}
-            >
-              <Select.Trigger placeholder="Select a project" />
-              <Select.Content>
-                {projects?.map((project) => (
-                  <Select.Item key={project.id} value={project.id.toString()}>
-                    {project.title}
-                  </Select.Item>
-                ))}
-              </Select.Content>
-            </Select.Root>
-          )}
-        />
+          <Controller
+            name="project_id"
+            control={control}
+            defaultValue={task?.project_id.toString()}
+            render={({ field }) => (
+              <Select.Root
+                onValueChange={field.onChange}
+                {...field}
+              >
+                <Select.Trigger placeholder="Select a project" />
+                <Select.Content>
+                  {projects?.map((project) => (
+                    <Select.Item key={project.id} value={project.id.toString()}>
+                      {project.title}
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select.Root>
+            )}
+          />
         </div>
         <Button disabled={isSubmitting}>
           {task ? "Update Task" : "Submit Task"} {isSubmitting && <Spinner />}
