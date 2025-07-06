@@ -7,7 +7,11 @@ __pycache__/
 # Environment files
 .env
 
-# Virtual environments (if any)
+# Database
+tasks.db
+*.db
+
+# Virtual environments
 venv/
 env/
 ENV/
@@ -20,7 +24,7 @@ ENV/
 Dockerfile
 docker-compose.yml
 
-# Tests and coverage reports (optional, keep if you want tests inside container)
+# Tests and coverage reports
 tests/
 .coverage
 htmlcov/

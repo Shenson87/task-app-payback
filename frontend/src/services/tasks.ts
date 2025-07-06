@@ -6,25 +6,25 @@ import { z } from "zod";
 type TaskForm = z.infer<typeof taskFormSchema>;
 
 export async function getTasks(): Promise<Task[]> {
-  const response = await api.get("/tasks");
-  return response.data;
+  const data = await api.get("/tasks").then((res) => res.data).catch((error) => console.error(error));
+  return data;
 }
 
 export async function getTask(taskId: number): Promise<Task> {
-  const response = await api.get(`/tasks/${taskId}`);
-  return response.data;
+  const data = await api.get(`/tasks/${taskId}`).then((res) => res.data).catch((error) => console.error(error));
+  return data;
 }
 
 export async function createTask(taskData: TaskForm): Promise<Task> {
-  const response = await api.post("/tasks", taskData);
-  return response.data as Task;
+  const data = await api.post("/tasks", taskData).then((res) => res.data).catch((error) => console.error(error));
+  return data as Task;
 }
 
 export async function putTask(taskId: number, taskData: TaskForm): Promise<Task> {
-  const response = await api.put(`/tasks/${taskId}`, taskData);
-  return response.data as Task;
+  const data = await api.put(`/tasks/${taskId}`, taskData).then((res) => res.data).catch((error) => console.error(error));
+  return data as Task;
 }
 
 export async function deleteTask(taskId: number): Promise<void> {
-  await api.delete(`/tasks/${taskId}`);
+  await api.delete(`/tasks/${taskId}`).catch((error) => console.error(error));
 }
