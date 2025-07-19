@@ -5,7 +5,7 @@ from typing import List
 from ..schemas.task import TaskCreate, TaskOut
 from ..database import get_db
 from .utils import validate_task_deadline
-from ..crud import task as crud_task
+from ..services import task as crud_task
 
 router = APIRouter(
     prefix="/tasks",

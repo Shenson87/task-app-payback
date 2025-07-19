@@ -5,7 +5,7 @@ from typing import List
 from ..schemas.project import ProjectCreate, ProjectOut
 from ..schemas.task import TaskOut
 from ..database import get_db
-from ..crud import project as crud_project
+from ..services import project as crud_project
 
 router = APIRouter(
     prefix="/projects",
