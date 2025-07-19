@@ -1,11 +1,11 @@
-from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from .. import models, schemas
+from ..schemas.task import TaskCreate, TaskOut
 from ..database import get_db
 from .utils import validate_task_deadline
+from ..crud import task as crud_task
 
 router = APIRouter(
     prefix="/tasks",
@@ -13,82 +13,66 @@ router = APIRouter(
 )
 
 
-@router.get("/", response_model=List[schemas.TaskOut])
+@router.get("/", response_model=List[TaskOut])
 def get_tasks(db: Session = Depends(get_db)):
     """
     Get all tasks.
 
     Returns:
-    List[schemas.TaskOut]: A list of all tasks.
+    List[TaskOut]: A list of all tasks.
     """
-    return db.query(models.Task).all()
+    return crud_task.get_tasks(db)
 
 
-@router.post("/", response_model=schemas.TaskOut)
-def create_task(task: schemas.TaskCreate, db: Session = Depends(get_db)):
+@router.post("/", response_model=TaskOut)
+def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     """
     Create a new task.
 
     Args:
-    task (schemas.TaskCreate): The new task data.
+    task (TaskCreate): The new task data.
 
     Raises:
     HTTPException: If the project of the task does not exist or the deadline of the task
                    is later than the deadline of the project.
 
     Returns:
-    schemas.TaskOut: The newly created task.
+    TaskOut: The newly created task.
     """
     # Check if task deadline is earlier than project deadline
     if task.deadline:
         validate_task_deadline(db, task)
 
-    db_task = models.Task(**task.model_dump())
-    db.add(db_task)
-    db.commit()
-    db.refresh(db_task)
-    return db_task
+    return crud_task.create_task(db, task)
 
 
-@router.get('/deadlines', response_model=List[schemas.TaskOut])
+@router.get('/deadlines', response_model=List[TaskOut])
 def get_tasks_with_deadlines(db: Session = Depends(get_db)):
     """
     Get tasks with deadlines.
 
     Returns:
-    List[schemas.TaskOut]: A list of tasks with deadlines.
+    List[TaskOut]: A list of tasks with deadlines.
     """
-    return db.query(models.Task).filter(models.Task.deadline != None).all()
+    return crud_task.get_tasks_with_deadlines(db)
 
 
-@router.get('/{task_id}', response_model=schemas.TaskOut)
+@router.get('/{task_id}', response_model=TaskOut)
 def get_task(task_id: int, db: Session = Depends(get_db)):
-    """
-    Get a specific task by its ID.
-
-    Args:
-    task_id (int): The ID of the task to be retrieved.
-
-    Raises:
-    HTTPException: If the task does not exist.
-
-    Returns:
-    schemas.TaskOut: The retrieved task.
-    """
-    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
-    if not db_task:
+    task = crud_task.get_task(db, task_id)
+    if not task:
         raise HTTPException(404, "Task not found")
-    return db_task
+    return task
 
 
-@router.put("/{task_id}", response_model=schemas.TaskOut)
-def update_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(get_db)):
+@router.put("/{task_id}", response_model=TaskOut)
+def update_task(task_id: int, task: TaskCreate, db: Session = Depends(get_db)):
     """
     Update a task.
 
     Args:
     task_id (int): The ID of the task to update.
-    task (schemas.TaskCreate): The updated task data.
+    task (TaskCreate): The updated task data.
 
     Raises:
     HTTPException: If the task does not exist.
@@ -96,22 +80,16 @@ def update_task(task_id: int, task: schemas.TaskCreate, db: Session = Depends(ge
                    is later than the deadline of the project.
 
     Returns:
-    schemas.TaskOut: The updated task.
+    TaskOut: The updated task.
     """
-    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
-    if not db_task:
-        raise HTTPException(404, "Task not found")
-
     # Check if task deadline is earlier than project deadline
     if task.deadline:
         validate_task_deadline(db, task)
 
-    for key, value in task.model_dump().items():
-        setattr(db_task, key, value)
-
-    db.commit()
-    db.refresh(db_task)
-    return db_task
+    updated_task = crud_task.update_task(db, task_id, task)
+    if not updated_task:
+        raise HTTPException(404, "Task not found")
+    return updated_task
 
 
 @router.delete("/{task_id}")
@@ -129,10 +107,7 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     Returns:
     dict: A message confirming the deletion of the task.
     """
-    db_task = db.query(models.Task).filter(models.Task.id == task_id).first()
-    if not db_task:
+    result = crud_task.delete_task(db, task_id)
+    if not result:
         raise HTTPException(404, "Task not found")
-
-    db.delete(db_task)
-    db.commit()
-    return {"message": f"Task {task_id} deleted"}
+    return result
