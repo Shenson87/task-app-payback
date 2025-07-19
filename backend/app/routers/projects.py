@@ -114,6 +114,9 @@ def list_project_tasks(project_id: int, db: Session = Depends(get_db)):
     Args:
     project_id (int): The ID of the project for which to retrieve tasks.
     db (Session): The database session dependency.
+    
+    Raises:
+    HTTPException: If the project does not exist or doesn't have tasks.
 
     Returns:
     List[schemas.TaskOut]: A list of tasks for the given project.
